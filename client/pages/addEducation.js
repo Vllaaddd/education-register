@@ -390,7 +390,6 @@ export default function AddEmployee() {
         });
   
       setName("");
-      setDate("")
       setInstructor("");
       setStartTime("");
       setEndTime("");

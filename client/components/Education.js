@@ -1,6 +1,6 @@
 import axios from "axios";
+import { indexOf } from "lodash";
 import Link from "next/link";
-import { useEffect, useState } from "react";
 import { styled } from "styled-components"
 
 const Wrapper = styled.div`
@@ -13,10 +13,6 @@ const Wrapper = styled.div`
     padding: 10px;
     background: #fff;
     position: relative;
-`;
-
-const StyledParagraph = styled.p`
-    text-align: center;
 `;
 
 const StyledLink = styled(Link)`
@@ -62,9 +58,31 @@ const DeleteButton = styled.button`
 export default function Education({_id, name, date, startTime, endTime, employees, instructor}){
 
     const handleDelete = id => {
-        axios.delete(`http://localhost:5000/education/${id}`).then(res => {
-            window.location.reload();
-        })
+        try {
+            axios.delete(`http://localhost:5000/education/${id}`).then(res => {
+                axios.get(`http://localhost:5000/employees`).then(res => {
+                    const employees = res.data;
+                    employees.map(employee => {
+                        if(employee.allEducations.includes(id)){
+                            const updatedEducations = employee.allEducations.filter(educationId => educationId !== id)
+                            axios.put(`http://localhost:5000/employees/${employee._id}`, {
+                                fullName: employee.fullName,
+                                leader: employee.leader,
+                                schedule: employee.schedule,
+                                status: employee.status,
+                                startOfWork: employee.startOfWork,
+                                profession: employee.profession,
+                                allEducations: updatedEducations,
+                            }).then(res => {
+                                window.location.reload()
+                            })
+                        }
+                    })
+                })
+            })
+        } catch (error) {
+            console.log('Error: ', error);
+        }
     }
 
     return(
