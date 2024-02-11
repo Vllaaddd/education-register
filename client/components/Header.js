@@ -65,7 +65,7 @@ export default function Header(){
 
     return(
         <StyledHeader className="flex px-2 gap-2 m-2">
-            <Title>Title</Title>
+            <Title>Ajax</Title>
             <LinksWrapper>
                 <StyledLink href="/" className={pathname === '/' ? 'active' : ''}>Головна</StyledLink>
                 <StyledLink href="/employees" className={pathname.includes('/employees') ? 'active' : ''}>Всі працівники</StyledLink>
